@@ -3455,7 +3455,7 @@
             this.txtCustName.Name = "txtCustName";
             this.txtCustName.Size = new System.Drawing.Size(73, 20);
             this.txtCustName.TabIndex = 9;
-            this.txtCustName.Text = "1001";
+            this.txtCustName.Text = "1004";
             // 
             // label67
             // 
