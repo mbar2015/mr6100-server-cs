@@ -1687,17 +1687,17 @@ namespace MR6100Demo
         
         private string EpcToBarcode(string epc, int iMaxLength)
         {
-            return Left(epc, 4);
+            return TrimLeft(epc, 4);
         }
 
-        private string Right(string value, int iMaxLength)
+        private string TrimRight(string value, int iMaxLength)
         {
             value = value.Substring(value.Length - iMaxLength, iMaxLength);
             return value;
         }
 
 
-        private string Left(string value, int maxLength)
+        private string TrimLeft(string value, int maxLength)
         {
             if (string.IsNullOrEmpty(value)) return value;
             maxLength = Math.Abs(maxLength);
@@ -1782,47 +1782,6 @@ namespace MR6100Demo
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            string data;
-            string input;
-            IPEndPoint ip = new IPEndPoint(IPAddress.Parse("62.90.151.230"), 5007);
-
-            Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-            try
-            {
-                server.Connect(ip);
-            }
-            catch (SocketException)
-            {
-                Console.WriteLine(e.ToString());
-                return;
-            }
-
-            NetworkStream ns = new NetworkStream(server);
-            StreamReader sr = new StreamReader(ns);
-            StreamWriter sw = new StreamWriter(ns);
-
-            Console.WriteLine("PS|RN411|CTCOLA|M#5|TA1700|DA150211|TI124254|P#1|");
-            data = sr.ReadLine();
-            
-
-            while (true)
-            {
-                input = Console.ReadLine();
-                sw.WriteLine(input);
-                sw.Flush();
-
-                data = sr.ReadLine();
-                Console.WriteLine(data);
-            }
-            sr.Close();
-            sw.Close();
-            ns.Close();
-            server.Shutdown(SocketShutdown.Both);
-            server.Close();
-        }
 
 
 
