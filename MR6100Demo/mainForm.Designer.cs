@@ -3512,7 +3512,7 @@
             this.Controls.Add(this.libInfo);
             this.Controls.Add(this.gbConnect);
             this.Name = "mainForm";
-            this.Text = "MR6100 Demo V1.0";
+            this.Text = "Minibar V1.0";
             this.Load += new System.EventHandler(this.mainForm_Load);
             this.gbConnect.ResumeLayout(false);
             this.gbConnect.PerformLayout();

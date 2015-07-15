@@ -304,14 +304,14 @@ namespace MR6100Demo
                                             ssql = ssql + "'" + tbIP.Text + "',";
                                             ssql = ssql + "2,";
                                             ssql = ssql + "(CAST((CASE WHEN DATEPART(HOUR,GETDATE())>=12 THEN (GETDATE()-1) ELSE GETDATE() END) AS BIGINT)*1440 - 46283040) + DATEDIFF(MINUTE, DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()), 0), GETDATE()), "; // /*nowdate*/
-                                            ssql = ssql + "'" + (Right(Ticks[Convert.ToInt64(no)].EPC, 4)) + "')";
+                                            ssql = ssql + "'" + (EpcToBarcode(Ticks[Convert.ToInt64(no)].EPC, 4)) + "')";
                                             AddDB(ssql);
 
 
-                                            string prodname = (Right(Ticks[Convert.ToInt64(no)].EPC, 4));
+                                            string prodname = (EpcToBarcode(Ticks[Convert.ToInt64(no)].EPC, 4));
 
 
-                                            switch (Right(Ticks[Convert.ToInt64(no)].EPC, 4))
+                                            switch (EpcToBarcode(Ticks[Convert.ToInt64(no)].EPC, 4))
                                             {
                                                 case "8004": prodname = "סודה בעלות של 7 שח";
                                                     break;
@@ -331,7 +331,7 @@ namespace MR6100Demo
                                                     break;
                                             }
 
-                                            sqlCommand = "SELECT PARTDES FROM PART WHERE BARCODE='" + Right(Ticks[Convert.ToInt64(no)].EPC, 4) + "'";
+                                            sqlCommand = "SELECT PARTDES FROM PART WHERE BARCODE='" + EpcToBarcode(Ticks[Convert.ToInt64(no)].EPC, 4) + "'";
                                             t = retDB(sqlCommand);
                                             if (t.Rows.Count > 0)
                                             {
@@ -398,13 +398,13 @@ namespace MR6100Demo
                         ssql = ssql + "'" + tbIP.Text + "',";
                         ssql = ssql + "1,";
                         ssql = ssql + "(CAST((CASE WHEN DATEPART(HOUR,GETDATE())>=12 THEN (GETDATE()-1) ELSE GETDATE() END) AS BIGINT)*1440 - 46283040) + DATEDIFF(MINUTE, DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()), 0), GETDATE()), ";
-                        ssql = ssql + "'" + (Right(Ticks[i].EPC, 4)) + "')";
+                        ssql = ssql + "'" + (EpcToBarcode(Ticks[i].EPC, 4)) + "')";
                         AddDB(ssql);
                         id_no_took.Add(i);
 
-                        string prodname = Right(Ticks[i].EPC, 4);
+                        string prodname = EpcToBarcode(Ticks[i].EPC, 4);
 
-                        switch (Right(Ticks[i].EPC, 4))
+                        switch (EpcToBarcode(Ticks[i].EPC, 4))
                         {
                             case "8004": prodname = "סודה בעלות של 7 שח";
                                 break;
@@ -424,7 +424,7 @@ namespace MR6100Demo
                                 break;
                         }
 
-                        sqlCommand = "SELECT PARTDES FROM PART WHERE BARCODE='" + (Right(Ticks[i].EPC, 4)) + "'";
+                        sqlCommand = "SELECT PARTDES FROM PART WHERE BARCODE='" + (EpcToBarcode(Ticks[i].EPC, 4)) + "'";
                         t = retDB(sqlCommand);
                         if (t.Rows.Count > 0)
                         {
@@ -1679,11 +1679,17 @@ namespace MR6100Demo
 
         //adam
         
-        private string Right(string sValue, int iMaxLength)
+        private string EpcToBarcode(string epc, int iMaxLength)
         {
-                sValue = sValue.Substring(sValue.Length - iMaxLength, iMaxLength);
-                return sValue;
+            return Left(epc, 4);
         }
+
+        private string Right(string value, int iMaxLength)
+        {
+            value = value.Substring(value.Length - iMaxLength, iMaxLength);
+            return value;
+        }
+
 
         private string Left(string value, int maxLength)
         {
