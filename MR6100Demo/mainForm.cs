@@ -37,6 +37,7 @@ namespace MR6100Demo
         byte v2 = 0;
         string strIP = "";
         int status = 0;
+        SqlConnection connVRM;
 
         public mainForm()
         {
@@ -81,6 +82,8 @@ namespace MR6100Demo
             
             const string SqlConfig = "c:\\MAFIC\\SqlConfig.ini";  //haim
             Globals.ConSql = GetSysFile(SqlConfig);
+            connVRM = new SqlConnection(Globals.ConSql);
+            connVRM.Open();
 
         }
 
@@ -91,10 +94,13 @@ namespace MR6100Demo
             sqlCommand = "SELECT CUST FROM CUSTOMERS WHERE CUSTNAME='" + txtCustName.Text + "'";
             DataTable t;
             t = retDB(sqlCommand);
-            
+
+            DataTable cc =retDB( "SELECT CUST,CUSTNAME FROM CUSTOMERS");
+
+
             custCode = Convert.ToString(t.Rows[0][0]);
            
-            custCode = "1";
+           
 
             int status = 1;
             string strTemp = "";
@@ -306,7 +312,7 @@ namespace MR6100Demo
                                             ssql = ssql + "(CAST((CASE WHEN DATEPART(HOUR,GETDATE())>=12 THEN (GETDATE()-1) ELSE GETDATE() END) AS BIGINT)*1440 - 46283040) + DATEDIFF(MINUTE, DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()), 0), GETDATE()), "; // /*nowdate*/
                                             ssql = ssql + "'" + (EpcToBarcode(Ticks[Convert.ToInt64(no)].EPC, 4)) + "')";
                                             AddDB(ssql);
-
+                                          
 
                                             string prodname = (EpcToBarcode(Ticks[Convert.ToInt64(no)].EPC, 4));
 
@@ -1715,17 +1721,13 @@ namespace MR6100Demo
                 command.ExecuteNonQuery();
             }
             */
-            SqlConnection connVRM = new SqlConnection(Globals.ConSql);
             SqlCommand cmd = new SqlCommand(sSql, connVRM);
-            connVRM.Open();
             cmd.ExecuteNonQuery();
         }
 
         public DataTable retDB(string sSql)
         {
             DataTable vrmTable = new DataTable();
-            SqlConnection connVRM = new SqlConnection(Globals.ConSql);
-            connVRM.Open();
             SqlCommand cmdVRM = new SqlCommand(sSql, connVRM);
             SqlDataAdapter vrmAdapter = new SqlDataAdapter(cmdVRM);
             vrmAdapter.Fill(vrmTable);
